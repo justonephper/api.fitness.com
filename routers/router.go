@@ -3,9 +3,11 @@ package routers
 import (
 	"api.fitness.com/app/controller/api/Log"
 	"api.fitness.com/app/controller/api/auth"
+	"api.fitness.com/app/controller/api/blog"
+	"api.fitness.com/app/controller/api/blogCategory"
 	"api.fitness.com/app/controller/api/user"
 	"api.fitness.com/app/helper/response"
-	"api.fitness.com/pkg/setting"
+	"api.fitness.com/global"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -13,7 +15,7 @@ import (
 
 //404错误处理
 func HandleNotFound(c *gin.Context) {
-	c.JSON(http.StatusNotFound, response.Failed(10004, "request url not exists!"))
+	c.JSON(http.StatusNotFound, response.Failed(10004, "requestParams url not exists!"))
 	return
 }
 
@@ -25,7 +27,7 @@ func Init() *gin.Engine {
 
 	//兜底路由
 	router.GET("/", func(c *gin.Context) {
-		response_str := "欢迎访问登云Api! " + "北京时间:" + time.Now().Format(setting.TimeFormate)
+		response_str := "欢迎访问登云Api! " + "北京时间:" + time.Now().Format(global.TimeFormate)
 		c.JSON(http.StatusOK, response.Success(response_str))
 		//c.String(http.StatusOK,response_str)
 	})
@@ -46,6 +48,20 @@ func Init() *gin.Engine {
 
 	//log接口
 	router.GET("logTest", Log.LogTest)
+
+	//blog category 相关接口
+	router.GET("blogCategories",blogCategory.Index)
+	router.GET("blogCategories/:id",blogCategory.Show)
+	router.POST("blogCategories",blogCategory.Add)
+	router.PUT("blogCategories",blogCategory.Update)
+	router.DELETE("blogCategories",blogCategory.Destroy)
+
+	//blog相关接口
+	router.GET("blogs", blog.Index)
+	router.GET("blogs/:id", blog.Show)
+	router.POST("blogs", blog.Add)
+	router.PUT("blogs/:id", blog.Update)
+	router.DELETE("blogs/:id", blog.Destroy)
 
 	return router
 }

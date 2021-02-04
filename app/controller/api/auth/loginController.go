@@ -2,8 +2,7 @@ package auth
 
 import (
 	"api.fitness.com/app/helper/response"
-	"api.fitness.com/app/service/auth"
-	"api.fitness.com/bean/request"
+	"api.fitness.com/bean/requestParams"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	logs "github.com/sirupsen/logrus"
@@ -12,7 +11,7 @@ import (
 
 //login
 func Login(c *gin.Context) {
-	var loginParam request.LoginParam
+	var loginParam requestParams.LoginParam
 	//var header bean.Header
 	if err := c.ShouldBind(&loginParam); err != nil {
 		//参数校验失败统一处理函数
@@ -21,7 +20,6 @@ func Login(c *gin.Context) {
 	}
 
 	//查询数据库
-	auth.Login(loginParam)
 	c.JSON(http.StatusOK, response.Success("login successful"))
 }
 

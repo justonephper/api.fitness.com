@@ -2,8 +2,10 @@ package user
 
 import (
 	"api.fitness.com/app/helper/response"
+	"api.fitness.com/bean/models"
+	"api.fitness.com/global"
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
@@ -13,8 +15,41 @@ import (
  * @Date:2021/1/29 17:58
  **/
 func Index(c *gin.Context) {
-	log.Println("this is a log")
-	c.JSON(http.StatusOK,response.Success("index"))
+	//c.JSON(http.StatusOK,responseParams.Success("success"))
+
+	//删除表结构
+	//global.DB.DropTableIfExists(&models.Users{})
+
+	//自动迁移表结构
+	global.DB.AutoMigrate(&models.Users{})
+
+	//添加数据
+
+	c.JSON(http.StatusOK, response.Success("migrate successful"))
+}
+
+/**
+ * @Desc:博客操作
+ * @Author:haoge
+ * @Date:2021/2/2 17:31
+ **/
+func Blog(c *gin.Context) {
+
+	//global.DB.DropTableIfExists(models.Blog{})
+	//生成表
+	global.DB.AutoMigrate(models.Blog{})
+
+	blog := models.Blog{
+		Name:    "第一篇博客222",
+		Title:   "这是title",
+		Content: "这是 desc",
+	}
+	//创建数据  自动填充
+	res := global.DB.NewRecord(blog)
+	fmt.Println("res:%v",res)
+	global.DB.Create(&blog)
+	res = global.DB.NewRecord(blog)
+	fmt.Println("res:%v",res)
 }
 
 /**

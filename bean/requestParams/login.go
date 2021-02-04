@@ -1,4 +1,4 @@
-package request
+package requestParams
 
 type LoginParam struct {
 	Email    string `json:"email" binding:"required,email"`

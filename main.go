@@ -10,7 +10,7 @@ import (
 func main() {
 	//框架初始化
 	bootstrap.Init()
-	// 设置路由信息
+	// 路由信息初始化
 	r := routers.Init()
 	// 启动服务器并监听 8080 端口
 	if err := r.Run();err != nil {

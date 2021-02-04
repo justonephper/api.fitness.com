@@ -10,7 +10,7 @@ import (
 var log = logrus.New()
 
 func LogTest(c *gin.Context) {
-	//c.JSON(http.StatusOK,response.Success("log test!"))
+	//c.JSON(http.StatusOK,responseParams.Success("log test!"))
 
 	////设置日志字段，使用info报错级别
 	//logrus.WithFields(logrus.Fields{

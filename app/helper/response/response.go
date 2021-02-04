@@ -10,6 +10,13 @@ import (
 	"strings"
 )
 
+type PageList struct {
+	List     interface{} `json:"list"`
+	Total    int64       `json:"total"`
+	Page     int         `json:"page"`
+	PageSize int         `json:"page_size"`
+}
+
 func removeTopStruct(fields map[string]string) map[string]string {
 	res := map[string]string{}
 	for field, err := range fields {
@@ -41,7 +48,7 @@ func Failed(codeNum int, data interface{}) gin.H {
 
 //成功回调
 func Success(data interface{}) gin.H {
-	return gin.H{"code": 10000, "data": data, "msg": "success"}
+	return gin.H{"code": code.Success, "data": data, "msg": "success"}
 }
 
 //请求的失败总方法
@@ -56,4 +63,24 @@ func UniqueFailedResponse(c *gin.Context, err error) gin.H {
 	locale := request.GetLocale(c)
 	trans := translator.GetTranslator(locale)
 	return CheckRequestFailed(errs.Translate(trans))
+}
+
+//分页数据
+func PageListData(list interface{}, total int64, info request.PageInfo) PageList {
+	return PageList{
+		List:     list,
+		Total:    total,
+		Page:     info.Page,
+		PageSize: info.PageSize,
+	}
+}
+
+//分页无数据
+func PageListNoData(info request.PageInfo) PageList {
+	return PageList{
+		List:     nil,
+		Total:    0,
+		Page:     info.Page,
+		PageSize: info.PageSize,
+	}
 }
