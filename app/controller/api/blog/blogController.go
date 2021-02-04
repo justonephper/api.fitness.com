@@ -13,10 +13,6 @@ import (
 
 var blog *models.Blog
 
-func init() {
-	blog = models.BlogNew()
-}
-
 /**
  * @Desc:添加博客
  * @Author:haoge
@@ -43,6 +39,7 @@ func Add(c *gin.Context) {
 	//	Content: params.Content,
 	//}
 
+	blog = models.BlogNew()
 	blog.Name = params.Name
 	blog.Title = params.Title
 	blog.Content = params.Content
@@ -72,6 +69,7 @@ func Update(c *gin.Context) {
 	id := c.Param("id")
 
 	//query db-data
+	blog = models.BlogNew()
 	ok := blog.Find(id)
 	if !ok {
 		c.JSON(http.StatusOK, response.Failed(code.BlogNotExists, nil))
@@ -104,6 +102,7 @@ func Destroy(c *gin.Context) {
 	id := c.Param("id")
 
 	//quert db-data
+	blog = models.BlogNew()
 	ok := blog.Find(id)
 	if !ok {
 		c.JSON(http.StatusOK, response.Failed(code.BlogNotExists, nil))
@@ -127,6 +126,7 @@ func Destroy(c *gin.Context) {
 func Show(c *gin.Context) {
 	id := c.Param("id")
 
+	blog = models.BlogNew()
 	ok := blog.Find(id)
 	if !ok {
 		c.JSON(http.StatusOK, response.Failed(code.BlogNotExists, nil))
@@ -150,6 +150,7 @@ func Index(c *gin.Context) {
 		return
 	}
 
+	blog = models.BlogNew()
 	list, total, err := blog.Index(pageInfo)
 	if err != nil {
 		c.JSON(http.StatusOK, response.Failed(code.Success, response.PageListNoData(pageInfo)))

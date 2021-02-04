@@ -3,7 +3,6 @@ package models
 import (
 	"api.fitness.com/app/helper/request"
 	"api.fitness.com/global"
-	"fmt"
 )
 
 type Blog struct {
@@ -20,24 +19,24 @@ func BlogNew() *Blog {
 }
 
 //添加
-func (blog *Blog) Create() bool {
-	if err := global.DB.Create(blog).Error; err != nil {
+func (c *Blog) Create() bool {
+	if err := global.DB.Create(c).Error; err != nil {
 		return false
 	}
 	return true
 }
 
 //根据id查询是否存在
-func (blog *Blog) Find(id interface{}) bool {
-	if global.DB.Where("id=?", id).First(blog).RecordNotFound() {
+func (c *Blog) Find(id interface{}) bool {
+	if global.DB.Where("id=?", id).First(c).RecordNotFound() {
 		return false
 	}
 	return true
 }
 
 //删除记录
-func (blog *Blog) Delete() bool {
-	err := global.DB.Delete(blog).Error
+func (c *Blog) Delete() bool {
+	err := global.DB.Delete(c).Error
 	if err != nil {
 		return false
 	}
@@ -45,25 +44,22 @@ func (blog *Blog) Delete() bool {
 }
 
 //修改记录
-func (blog *Blog) Update(updateData map[string]interface{}) bool {
-	if err := global.DB.Model(blog).Updates(updateData).Error; err != nil {
+func (c *Blog) Update(updateData map[string]interface{}) bool {
+	if err := global.DB.Model(c).Updates(updateData).Error; err != nil {
 		return false
 	}
 	return true
 }
 
 //列表
-func (blog *Blog) Index(info request.PageInfo) (list []Blog, total int64, err error) {
+func (c *Blog) Index(info request.PageInfo) (list []Blog, total int64, err error) {
 	q := info.Q
-	order := info.Order
+	order_key := info.OrderKey
 	desc := info.Desc
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 
-	fmt.Println(limit)
-	fmt.Println(offset)
-
-	db := global.DB.Model(blog)
+	db := global.DB.Model(c)
 
 	//搜索关键词
 	if q != "" {
@@ -78,12 +74,12 @@ func (blog *Blog) Index(info request.PageInfo) (list []Blog, total int64, err er
 
 	db = db.Limit(limit).Offset(offset)
 	//排序
-	if order != "" {
+	if order_key != "" {
 		var OrderStr string
 		if desc {
-			OrderStr = order + " desc"
+			OrderStr = order_key + " desc"
 		} else {
-			OrderStr = order
+			OrderStr = order_key
 		}
 		err = db.Order(OrderStr).Find(&list).Error
 	} else {

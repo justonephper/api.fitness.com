@@ -50,11 +50,11 @@ func Init() *gin.Engine {
 	router.GET("logTest", Log.LogTest)
 
 	//blog category 相关接口
-	router.GET("blogCategories",blogCategory.Index)
-	router.GET("blogCategories/:id",blogCategory.Show)
-	router.POST("blogCategories",blogCategory.Add)
-	router.PUT("blogCategories",blogCategory.Update)
-	router.DELETE("blogCategories",blogCategory.Destroy)
+	router.GET("blogCategories", blogCategory.Index)
+	router.GET("blogCategories/:id", blogCategory.Show)
+	router.POST("blogCategories", blogCategory.Add)
+	router.PUT("blogCategories/:id", blogCategory.Update)
+	router.DELETE("blogCategories/:id", blogCategory.Destroy)
 
 	//blog相关接口
 	router.GET("blogs", blog.Index)

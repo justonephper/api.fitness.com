@@ -12,14 +12,15 @@ type ModelId struct {
 	Id uint `gorm:"primary_key" json:"id"`
 }
 
-type ModelTime struct {
-	CreatedAt MyTime  `json:"created_at"`
-	UpdatedAt MyTime  `json:"updated_at"`
-	DeletedAt *MyTime `sql:"index" json:"deleted_at"`
-}
-
 //MyTime 自定义时间
 type MyTime time.Time
+
+type ModelTime struct {
+	CreatedAt MyTime  `json:"created_at" gorm:"type:datetime"`
+	UpdatedAt MyTime  `json:"updated_at" gorm:"type:datetime"`
+	DeletedAt *MyTime `sql:"index" json:"deleted_at" gorm:"type:datetime"`
+}
+
 
 func (t *MyTime) UnmarshalJSON(data []byte) error {
 	if string(data) == "null" {
