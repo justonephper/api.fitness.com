@@ -6,7 +6,6 @@ import (
 	"api.fitness.com/pkg/util/translator"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"reflect"
 	"strings"
 )
 
@@ -25,19 +24,16 @@ func removeTopStruct(fields map[string]string) map[string]string {
 	return res
 }
 
-//校验参数失败回调
+//校验参数失败回调     string | map[string]string
 func CheckRequestFailed(msg interface{}) gin.H {
 	//数据处理
-	typeOf := reflect.TypeOf(msg)
-
-	switch typeOf.Kind() {
-	case reflect.String:
-		return gin.H{"code": code.BadRequestParams, "data": nil, "msg": msg.(string)}
-	case reflect.Map:
-		msgs := msg.(validator.ValidationErrorsTranslations)
+	switch msgs := msg.(type) {
+	case string:
+		return gin.H{"code": code.BadRequestParams, "data": nil, "msg": msgs}
+	case map[string]string:
 		return gin.H{"code": code.BadRequestParams, "data": nil, "msg": removeTopStruct(msgs)}
 	default:
-		panic("Unsupported data")
+		return gin.H{"code": code.BadRequestParams, "data": nil, "msg": code.LogicCodeText(code.BadRequestParams)}
 	}
 }
 

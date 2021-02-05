@@ -7,6 +7,7 @@ import (
 
 type Blog struct {
 	ModelId
+
 	Name    string `json:"name" gorm:"default:'';size:64;comment:'博客名称'"`
 	Title   string `json:"title" gorm:"default:'';size:128;comment:'标题'"`
 	Content string `json:"content" gorm:"type:text;not null;comment:'内容'"`

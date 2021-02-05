@@ -6,8 +6,8 @@ var (
 	BadRequestParams = 10002
 
 	//blog category
-	BlogCategoryAddFailed = 10501
-	BlogCategoryNotExists = 10502
+	BlogCategoryAddFailed    = 10501
+	BlogCategoryNotExists    = 10502
 	BlogCategoryUpdateFailed = 10503
 	BlogCategoryDeleteFailed = 10504
 
@@ -21,13 +21,13 @@ var (
 var LogicCode = map[int]string{
 	10000: "success",
 	10001: "failed",
-	10002: "Request parameter error",
+	10002: "Illegal request parameter",
 
 	//blog category相关（10501-10520）
-	10501:"Blog Category add failed",
-	10502:"Blog Category not exists",
-	10503:"Blog Category update failed",
-	10504:"Blog Category delete failed",
+	10501: "Blog Category add failed",
+	10502: "Blog Category not exists",
+	10503: "Blog Category update failed",
+	10504: "Blog Category delete failed",
 
 	//blog相关 （10500-11000）
 	10521: "Blog add failed!",
@@ -37,5 +37,9 @@ var LogicCode = map[int]string{
 }
 
 func LogicCodeText(code int) string {
-	return LogicCode[code]
+	msg, ok := LogicCode[code]
+	if !ok {
+		return LogicCode[Failed]
+	}
+	return msg
 }

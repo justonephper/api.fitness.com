@@ -35,6 +35,27 @@ func TestPanic(c *gin.Context) {
 	panic("the type is string!")
 }
 
+//测试响应
+func TestResponse(c *gin.Context) {
+	msgStr := response.CheckRequestFailed("this is a string")
+	fmt.Println(msgStr)
+
+	msgMap := map[string]interface{}{
+		"code": 10000,
+		"data": nil,
+		"msg": map[string]string{
+			"name":     "haoge",
+			"password": "111111",
+		},
+	}
+
+	//dataMap := response.CheckRequestFailed(msgMap)
+	//fmt.Println(dataMap)
+
+	c.JSON(http.StatusOK,response.CheckRequestFailed(msgMap))
+	return
+}
+
 //异步任务逻辑
 func asyncJob() {
 	//异步发送邮件
@@ -43,7 +64,7 @@ func asyncJob() {
 
 //register
 func Register(c *gin.Context) {
-	c.JSON(http.StatusOK,response.Success("注册成功"))
+	c.JSON(http.StatusOK, response.Success("注册成功"))
 }
 
 //logOut
@@ -52,8 +73,8 @@ func LogOut(c *gin.Context) {
 	return
 }
 
-func Logs(c *gin.Context)  {
+func Logs(c *gin.Context) {
 	logs.WithFields(logs.Fields{
-		"animal":"dog",
+		"animal": "dog",
 	}).Info("大黄")
 }

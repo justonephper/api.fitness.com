@@ -38,6 +38,7 @@ func Init() *gin.Engine {
 	router.POST("register", auth.Register)
 	router.GET("logout", auth.LogOut)
 	router.GET("logs", auth.Logs)
+	router.GET("response", auth.TestResponse)
 
 	//db-test
 	router.GET("users", user.Index)
