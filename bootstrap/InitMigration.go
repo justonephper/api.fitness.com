@@ -1,13 +1,15 @@
 package bootstrap
 
 import (
-	"api.fitness.com/bean/models"
-	"api.fitness.com/global"
+	"fitness/bean/models"
+	"fitness/global"
 )
 
 func InitMigration() {
 	global.DB.AutoMigrate(
 		models.Users{},
+		models.BlogCategory{},
+		models.Blog{},
 	)
 	return
 }

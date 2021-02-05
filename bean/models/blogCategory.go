@@ -1,8 +1,8 @@
 package models
 
 import (
-	"api.fitness.com/app/helper/request"
-	"api.fitness.com/global"
+	"fitness/app/helper/request"
+	"fitness/global"
 )
 
 type BlogCategory struct {
@@ -13,7 +13,7 @@ type BlogCategory struct {
 }
 
 //实例化对象
-func BlogCategoryNew() *BlogCategory {
+func NewBlogCategory() *BlogCategory {
 	return &BlogCategory{}
 }
 

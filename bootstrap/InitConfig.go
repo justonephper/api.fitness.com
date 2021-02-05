@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"api.fitness.com/global"
+	"fitness/global"
 	"github.com/go-ini/ini"
 	"log"
 	"time"
@@ -43,6 +43,7 @@ func LoadApp() {
 		log.Fatalf("Fail to get section 'app': %v", err)
 	}
 
-	global.JwtSecret = sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)")
-	global.PageSize = sec.Key("PAGE_SIZE").MustInt(10)
+	//注意，JwtSecret必须是[]byte类型
+	global.JwtSecret = []byte(sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)"))
+	global.APP_NAME = sec.Key("APP_NAME").MustString("fitness")
 }

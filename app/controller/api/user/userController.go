@@ -1,12 +1,11 @@
 package user
 
 import (
-	"api.fitness.com/app/helper/response"
-	"api.fitness.com/bean/models"
-	"api.fitness.com/global"
+	"fitness/app/helper/response"
+	"fitness/bean/models"
+	"fitness/global"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 /**
@@ -25,7 +24,7 @@ func Index(c *gin.Context) {
 
 	//添加数据
 
-	c.JSON(http.StatusOK, response.Success("migrate successful"))
+	response.Success(c, "migrate successful")
 }
 
 /**
@@ -46,10 +45,10 @@ func Blog(c *gin.Context) {
 	}
 	//创建数据  自动填充
 	res := global.DB.NewRecord(blog)
-	fmt.Println("res:%v",res)
+	fmt.Println("res:%v", res)
 	global.DB.Create(&blog)
 	res = global.DB.NewRecord(blog)
-	fmt.Println("res:%v",res)
+	fmt.Println("res:%v", res)
 }
 
 /**

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"api.fitness.com/bootstrap"
-	"api.fitness.com/global"
-	"api.fitness.com/routers"
+	"fitness/bootstrap"
+	"fitness/global"
+	"fitness/routers"
 	"fmt"
 )
 

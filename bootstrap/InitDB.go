@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"api.fitness.com/global"
+	"fitness/global"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"log"
@@ -17,6 +17,8 @@ func InitDB() {
 	if err != nil {
 		log.Fatal(2, "Fail to get section 'database': %v", err)
 	}
+
+
 
 	dbType = sec.Key("TYPE").String()
 	dbName = sec.Key("NAME").String()

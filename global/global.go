@@ -12,12 +12,19 @@ var (
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 
-	PageSize  int
-	JwtSecret string
+	APP_NAME  string
+	JwtSecret []byte
 
 	TimeFormate = "2006-01-02 15:04:05"
 
 	DB *gorm.DB
 
 	//Loger Loger
+)
+
+const (
+	TokenExpireDuration = time.Hour * 2
+	RoleAdmin           = "admin"
+	RoleUser            = "user"
+	RoleStaff           = "staff"
 )

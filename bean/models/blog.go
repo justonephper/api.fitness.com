@@ -1,8 +1,8 @@
 package models
 
 import (
-	"api.fitness.com/app/helper/request"
-	"api.fitness.com/global"
+	"fitness/app/helper/request"
+	"fitness/global"
 )
 
 type Blog struct {
@@ -15,7 +15,7 @@ type Blog struct {
 }
 
 //实例化对象
-func BlogNew() *Blog {
+func NewBlog() *Blog {
 	return &Blog{}
 }
 
@@ -29,6 +29,7 @@ func (c *Blog) Create() bool {
 
 //根据id查询是否存在
 func (c *Blog) Find(id interface{}) bool {
+	global.DB.Where("id=?",id).First(c)
 	if global.DB.Where("id=?", id).First(c).RecordNotFound() {
 		return false
 	}

@@ -1,14 +1,13 @@
 package blog
 
 import (
-	"api.fitness.com/app/helper/request"
-	"api.fitness.com/app/helper/response"
-	"api.fitness.com/bean/models"
-	"api.fitness.com/bean/requestParams"
-	"api.fitness.com/global"
-	"api.fitness.com/pkg/code"
+	"fitness/app/helper/request"
+	"fitness/app/helper/response"
+	"fitness/bean/models"
+	"fitness/bean/requestParams"
+	"fitness/global"
+	"fitness/pkg/code"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 var blog *models.Blog
@@ -23,7 +22,7 @@ func Add(c *gin.Context) {
 	//parse requestParams params
 	if err := c.ShouldBind(&params); err != nil {
 		//参数校验失败统一处理函数
-		c.JSON(http.StatusOK, response.UniqueFailedResponse(c.Copy(), err))
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
@@ -39,16 +38,16 @@ func Add(c *gin.Context) {
 	//	Content: params.Content,
 	//}
 
-	blog = models.BlogNew()
+	blog = models.NewBlog()
 	blog.Name = params.Name
 	blog.Title = params.Title
 	blog.Content = params.Content
 
 	if ok := blog.Create(); !ok {
-		c.JSON(http.StatusOK, response.Failed(code.BlogAddFailed, nil))
+		response.Failed(c, code.BlogAddFailed, nil)
 		return
 	}
-	c.JSON(http.StatusOK, response.Success(blog))
+	response.Success(c, blog)
 	return
 }
 
@@ -61,7 +60,7 @@ func Update(c *gin.Context) {
 	var params requestParams.BlogUpdateParams
 	//parse requestParams params
 	if err := c.Bind(&params); err != nil {
-		c.JSON(http.StatusOK, response.UniqueFailedResponse(c.Copy(), err))
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
@@ -69,10 +68,10 @@ func Update(c *gin.Context) {
 	id := c.Param("id")
 
 	//query db-data
-	blog = models.BlogNew()
+	blog = models.NewBlog()
 	ok := blog.Find(id)
 	if !ok {
-		c.JSON(http.StatusOK, response.Failed(code.BlogNotExists, nil))
+		response.Failed(c, code.BlogNotExists, nil)
 		return
 	}
 
@@ -84,11 +83,11 @@ func Update(c *gin.Context) {
 	}
 
 	if ok = blog.Update(updateData); !ok {
-		c.JSON(http.StatusOK, response.Failed(code.BlogUpdateFailed, nil))
+		response.Failed(c, code.BlogUpdateFailed, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.Success(blog))
+	response.Success(c, blog)
 	return
 }
 
@@ -102,19 +101,19 @@ func Destroy(c *gin.Context) {
 	id := c.Param("id")
 
 	//quert db-data
-	blog = models.BlogNew()
+	blog = models.NewBlog()
 	ok := blog.Find(id)
 	if !ok {
-		c.JSON(http.StatusOK, response.Failed(code.BlogNotExists, nil))
+		response.Failed(c, code.BlogNotExists, nil)
 		return
 	}
 
 	//delete db-data
 	if !blog.Delete() {
-		c.JSON(http.StatusOK, response.Failed(code.BlogDeleteFailed, nil))
+		response.Failed(c, code.BlogDeleteFailed, nil)
 		return
 	}
-	c.JSON(http.StatusOK, response.Success(nil))
+	response.Success(c, nil)
 	return
 }
 
@@ -126,13 +125,13 @@ func Destroy(c *gin.Context) {
 func Show(c *gin.Context) {
 	id := c.Param("id")
 
-	blog = models.BlogNew()
+	blog = models.NewBlog()
 	ok := blog.Find(id)
 	if !ok {
-		c.JSON(http.StatusOK, response.Failed(code.BlogNotExists, nil))
+		response.Failed(c, code.BlogNotExists, nil)
 		return
 	}
-	c.JSON(http.StatusOK, response.Success(blog))
+	response.Success(c, blog)
 	return
 }
 
@@ -146,17 +145,17 @@ func Index(c *gin.Context) {
 
 	//params validate
 	if err := c.Bind(&pageInfo); err != nil {
-		c.JSON(http.StatusOK, response.UniqueFailedResponse(c.Copy(), err))
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
-	blog = models.BlogNew()
+	blog = models.NewBlog()
 	list, total, err := blog.Index(pageInfo)
 	if err != nil {
-		c.JSON(http.StatusOK, response.Failed(code.Success, response.PageListNoData(pageInfo)))
+		response.PageListNoData(c, pageInfo)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.Success(response.PageListData(list, total, pageInfo)))
+	response.PageListData(c, list, total, pageInfo)
 	return
 }

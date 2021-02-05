@@ -1,12 +1,11 @@
 package auth
 
 import (
-	"api.fitness.com/app/helper/response"
-	"api.fitness.com/bean/requestParams"
+	"fitness/app/helper/response"
+	"fitness/bean/requestParams"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	logs "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 //login
@@ -15,19 +14,19 @@ func Login(c *gin.Context) {
 	//var header bean.Header
 	if err := c.ShouldBind(&loginParam); err != nil {
 		//参数校验失败统一处理函数
-		c.JSON(http.StatusOK, response.UniqueFailedResponse(c.Copy(), err))
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
 	//查询数据库
-	c.JSON(http.StatusOK, response.Success("login successful"))
+	response.Success(c, "login successful")
 }
 
 //测试异常的使用
 func TestPanic(c *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
-			c.JSON(http.StatusOK, response.CheckRequestFailed(err))
+			response.CheckRequestFailed(c, err)
 		}
 	}()
 
@@ -37,8 +36,7 @@ func TestPanic(c *gin.Context) {
 
 //测试响应
 func TestResponse(c *gin.Context) {
-	msgStr := response.CheckRequestFailed("this is a string")
-	fmt.Println(msgStr)
+	response.CheckRequestFailed(c, "this is a string")
 
 	msgMap := map[string]interface{}{
 		"code": 10000,
@@ -52,7 +50,7 @@ func TestResponse(c *gin.Context) {
 	//dataMap := response.CheckRequestFailed(msgMap)
 	//fmt.Println(dataMap)
 
-	c.JSON(http.StatusOK,response.CheckRequestFailed(msgMap))
+	response.CheckRequestFailed(c, msgMap)
 	return
 }
 
@@ -64,12 +62,12 @@ func asyncJob() {
 
 //register
 func Register(c *gin.Context) {
-	c.JSON(http.StatusOK, response.Success("注册成功"))
+	response.Success(c, "注册成功")
 }
 
 //logOut
 func LogOut(c *gin.Context) {
-	c.JSON(http.StatusOK, response.Success("退出成功"))
+	response.Success(c, "退出成功")
 	return
 }
 

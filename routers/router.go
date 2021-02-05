@@ -1,13 +1,13 @@
 package routers
 
 import (
-	"api.fitness.com/app/controller/api/Log"
-	"api.fitness.com/app/controller/api/auth"
-	"api.fitness.com/app/controller/api/blog"
-	"api.fitness.com/app/controller/api/blogCategory"
-	"api.fitness.com/app/controller/api/user"
-	"api.fitness.com/app/helper/response"
-	"api.fitness.com/global"
+	"fitness/app/controller/api/Log"
+	"fitness/app/controller/api/auth"
+	"fitness/app/controller/api/blog"
+	"fitness/app/controller/api/blogCategory"
+	"fitness/app/controller/api/user"
+	"fitness/app/helper/response"
+	"fitness/global"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -40,6 +40,9 @@ func Init() *gin.Engine {
 	router.GET("logs", auth.Logs)
 	router.GET("response", auth.TestResponse)
 
+	router.GET("genToken", auth.GenToken)
+	router.GET("parseToken", auth.ParseToken)
+
 	//db-test
 	router.GET("users", user.Index)
 	router.GET("users/:id", user.Show)
@@ -63,6 +66,8 @@ func Init() *gin.Engine {
 	router.POST("blogs", blog.Add)
 	router.PUT("blogs/:id", blog.Update)
 	router.DELETE("blogs/:id", blog.Destroy)
+
+
 
 	return router
 }

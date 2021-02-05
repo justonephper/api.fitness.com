@@ -1,9 +1,12 @@
 package code
 
 var (
-	Success          = 10000
-	Failed           = 10001
-	BadRequestParams = 10002
+	Success                 = 10000
+	Failed                  = 10001
+	BadRequestParams        = 10002
+	NoLoginOrIllegalAccess  = 10003
+	AuthorizationHasExpired = 10004
+	//未登录或非法访问
 
 	//blog category
 	BlogCategoryAddFailed    = 10501
@@ -22,6 +25,8 @@ var LogicCode = map[int]string{
 	10000: "success",
 	10001: "failed",
 	10002: "Illegal request parameter",
+	10003: "No login or illegal access",
+	10004: "The authorization has expired",
 
 	//blog category相关（10501-10520）
 	10501: "Blog Category add failed",
