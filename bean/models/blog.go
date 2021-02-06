@@ -1,8 +1,8 @@
 package models
 
 import (
-	"fitness/app/helper/request"
 	"fitness/global"
+	"fitness/pkg/util/request"
 )
 
 type Blog struct {

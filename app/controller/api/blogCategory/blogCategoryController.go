@@ -1,12 +1,12 @@
 package blogCategory
 
 import (
-	"fitness/app/helper/request"
-	"fitness/app/helper/response"
 	"fitness/bean/models"
 	"fitness/bean/requestParams"
 	"fitness/global"
 	"fitness/pkg/code"
+	"fitness/pkg/util/request"
+	"fitness/pkg/util/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,7 +22,7 @@ func Add(c *gin.Context) {
 
 	//validate request params
 	if err := c.Bind(&params); err != nil {
-		response.UniqueFailedResponse(c, err)
+		response.UniqueFailedResponse(err)
 		return
 	}
 
@@ -34,10 +34,10 @@ func Add(c *gin.Context) {
 	blogCategory.Desc = params.Desc
 	ok := blogCategory.Add()
 	if !ok {
-		response.Failed(c, code.BlogCategoryAddFailed, nil)
+		response.Failed(code.BlogCategoryAddFailed, nil)
 		return
 	}
-	response.Success(c, blogCategory)
+	response.Success(blogCategory)
 	return
 }
 
@@ -51,10 +51,10 @@ func Show(c *gin.Context) {
 
 	blogCategory = models.NewBlogCategory()
 	if !blogCategory.Find(id) {
-		response.Failed(c, code.BlogCategoryNotExists, nil)
+		response.Failed(code.BlogCategoryNotExists, nil)
 		return
 	}
-	response.Success(c, blogCategory)
+	response.Success(blogCategory)
 	return
 }
 
@@ -66,7 +66,7 @@ func Show(c *gin.Context) {
 func Update(c *gin.Context) {
 	var params requestParams.BlogCategoryUpdateParams
 	if err := c.Bind(&params); err != nil {
-		response.UniqueFailedResponse(c, err)
+		response.UniqueFailedResponse(err)
 		return
 	}
 	id := c.Param("id")
@@ -74,7 +74,7 @@ func Update(c *gin.Context) {
 	blogCategory = models.NewBlogCategory()
 	//查询是否存在
 	if !blogCategory.Find(id) {
-		response.Failed(c, code.BlogCategoryNotExists, nil)
+		response.Failed(code.BlogCategoryNotExists, nil)
 		return
 	}
 
@@ -83,10 +83,10 @@ func Update(c *gin.Context) {
 		"desc": params.Desc,
 	}
 	if !blogCategory.Update(updateData) {
-		response.Failed(c, code.BlogCategoryUpdateFailed, nil)
+		response.Failed(code.BlogCategoryUpdateFailed, nil)
 		return
 	}
-	response.Success(c, nil)
+	response.Success(nil)
 	return
 }
 
@@ -101,16 +101,16 @@ func Destroy(c *gin.Context) {
 	blogCategory = models.NewBlogCategory()
 	//查询数据是否存在
 	if !blogCategory.Find(id) {
-		response.Failed(c, code.BlogCategoryNotExists, nil)
+		response.Failed(code.BlogCategoryNotExists, nil)
 		return
 	}
 
 	//删除数据
 	if !blogCategory.Delete() {
-		response.Failed(c, code.BlogCategoryDeleteFailed, nil)
+		response.Failed(code.BlogCategoryDeleteFailed, nil)
 		return
 	}
-	response.Success(c, nil)
+	response.Success(nil)
 	return
 }
 
@@ -123,7 +123,7 @@ func Index(c *gin.Context) {
 	var pageInfo request.PageInfo
 	//param validate
 	if err := c.Bind(&pageInfo); err != nil {
-		response.UniqueFailedResponse(c, err)
+		response.UniqueFailedResponse(err)
 		return
 	}
 
@@ -131,9 +131,9 @@ func Index(c *gin.Context) {
 	blogCategory = models.NewBlogCategory()
 	list, total, err := blogCategory.Index(pageInfo)
 	if err != nil {
-		response.PageListNoData(c, pageInfo)
+		response.PageListNoData(pageInfo)
 		return
 	}
-	response.PageListData(c, list, total, pageInfo)
+	response.PageListData(list, total, pageInfo)
 	return
 }

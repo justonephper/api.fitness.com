@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"fitness/app/helper/response"
 	"fitness/bean/requestParams"
+	"fitness/pkg/util/response"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	logs "github.com/sirupsen/logrus"
@@ -14,19 +14,19 @@ func Login(c *gin.Context) {
 	//var header bean.Header
 	if err := c.ShouldBind(&loginParam); err != nil {
 		//参数校验失败统一处理函数
-		response.UniqueFailedResponse(c, err)
+		response.UniqueFailedResponse(err)
 		return
 	}
 
 	//查询数据库
-	response.Success(c, "login successful")
+	response.Success("login successful")
 }
 
 //测试异常的使用
 func TestPanic(c *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
-			response.CheckRequestFailed(c, err)
+			response.CheckRequestFailed(err)
 		}
 	}()
 
@@ -36,7 +36,7 @@ func TestPanic(c *gin.Context) {
 
 //测试响应
 func TestResponse(c *gin.Context) {
-	response.CheckRequestFailed(c, "this is a string")
+	response.CheckRequestFailed("this is a string")
 
 	msgMap := map[string]interface{}{
 		"code": 10000,
@@ -50,24 +50,24 @@ func TestResponse(c *gin.Context) {
 	//dataMap := response.CheckRequestFailed(msgMap)
 	//fmt.Println(dataMap)
 
-	response.CheckRequestFailed(c, msgMap)
+	response.CheckRequestFailed(msgMap)
 	return
 }
 
 //异步任务逻辑
 func asyncJob() {
 	//异步发送邮件
-	//job.SendRegisterEmail(nil)
+	//task.SendRegisterEmail(nil)
 }
 
 //register
 func Register(c *gin.Context) {
-	response.Success(c, "注册成功")
+	response.Success("注册成功")
 }
 
 //logOut
 func LogOut(c *gin.Context) {
-	response.Success(c, "退出成功")
+	response.Success("退出成功")
 	return
 }
 

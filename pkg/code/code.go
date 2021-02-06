@@ -6,6 +6,7 @@ var (
 	BadRequestParams        = 10002
 	NoLoginOrIllegalAccess  = 10003
 	AuthorizationHasExpired = 10004
+	RequestUrlNotFound = 10005
 	//未登录或非法访问
 
 	//blog category
@@ -27,6 +28,7 @@ var LogicCode = map[int]string{
 	10002: "Illegal request parameter",
 	10003: "No login or illegal access",
 	10004: "The authorization has expired",
+	10005: "Request url not found",
 
 	//blog category相关（10501-10520）
 	10501: "Blog Category add failed",

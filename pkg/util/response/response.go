@@ -1,10 +1,10 @@
 package response
 
 import (
-	"fitness/app/helper/request"
+	"fitness/global"
 	"fitness/pkg/code"
+	"fitness/pkg/util/request"
 	"fitness/pkg/util/translator"
-	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"net/http"
 	"strings"
@@ -31,9 +31,9 @@ func removeTopStruct(fields map[string]string) map[string]string {
 	return res
 }
 
-func Result(c *gin.Context, code int, data interface{}, msg interface{}) {
+func Result(code int, data interface{}, msg interface{}) {
 	// 开始时间
-	c.JSON(http.StatusOK, Response{
+	global.C.JSON(http.StatusOK, Response{
 		code,
 		data,
 		msg,
@@ -41,61 +41,61 @@ func Result(c *gin.Context, code int, data interface{}, msg interface{}) {
 }
 
 //校验参数失败回调     string | map[string]string
-func CheckRequestFailed(c *gin.Context, msg interface{}) {
+func CheckRequestFailed(msg interface{}) {
 	//数据处理
 	switch msgs := msg.(type) {
 	case string:
-		Result(c, code.BadRequestParams, nil, msgs)
+		Result(code.BadRequestParams, nil, msgs)
 	case map[string]string:
-		Result(c, code.BadRequestParams, nil, removeTopStruct(msgs))
+		Result(code.BadRequestParams, nil, removeTopStruct(msgs))
 	default:
-		Result(c, code.BadRequestParams, nil, code.LogicCodeText(code.BadRequestParams))
+		Result(code.BadRequestParams, nil, code.LogicCodeText(code.BadRequestParams))
 	}
 }
 
 //普通失败回调
-func Failed(c *gin.Context, codeNum int, data interface{}) {
-	Result(c, codeNum, data, code.LogicCodeText(codeNum))
+func Failed(codeNum int, data interface{}) {
+	Result(codeNum, data, code.LogicCodeText(codeNum))
 }
 
 //成功回调
-func Success(c *gin.Context, data interface{}) {
-	Result(c, code.Success, data, code.LogicCodeText(code.Success))
+func Success(data interface{}) {
+	Result(code.Success, data, code.LogicCodeText(code.Success))
 }
 
 //请求的失败总方法
-func UniqueFailedResponse(c *gin.Context, err error) {
+func UniqueFailedResponse(err error) {
 	//检测是否是参数校验错误
 	errs, ok := err.(validator.ValidationErrors)
 	if !ok {
 		// 非validator.ValidationErrors类型错误直接返回
-		Failed(c, code.BadRequestParams, err.Error())
+		Failed(code.BadRequestParams, err.Error())
 		return
 	}
 	// validator.ValidationErrors类型错误则进行翻译
-	locale := request.GetLocale(c)
+	locale := request.GetLocale()
 	trans := translator.GetTranslator(locale)
-	CheckRequestFailed(c, errs.Translate(trans))
+	CheckRequestFailed(errs.Translate(trans))
 }
 
 //分页数据
-func PageListData(c *gin.Context, list interface{}, total int64, info request.PageInfo) {
+func PageListData(list interface{}, total int64, info request.PageInfo) {
 	data := PageList{
 		List:     list,
 		Total:    total,
 		Page:     info.Page,
 		PageSize: info.PageSize,
 	}
-	Result(c, code.Success, data, code.LogicCodeText(code.Success))
+	Result(code.Success, data, code.LogicCodeText(code.Success))
 }
 
 //分页无数据
-func PageListNoData(c *gin.Context, info request.PageInfo) {
+func PageListNoData(info request.PageInfo) {
 	data := PageList{
 		List:     nil,
 		Total:    0,
 		Page:     info.Page,
 		PageSize: info.PageSize,
 	}
-	Result(c, code.Success, data, code.LogicCodeText(code.Success))
+	Result(code.Success, data, code.LogicCodeText(code.Success))
 }

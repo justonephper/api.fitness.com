@@ -1,9 +1,9 @@
 package user
 
 import (
-	"fitness/app/helper/response"
 	"fitness/bean/models"
 	"fitness/global"
+	"fitness/pkg/util/response"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +24,7 @@ func Index(c *gin.Context) {
 
 	//添加数据
 
-	response.Success(c, "migrate successful")
+	response.Success("migrate successful")
 }
 
 /**

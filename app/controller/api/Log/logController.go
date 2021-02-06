@@ -1,7 +1,7 @@
 package Log
 
 import (
-	"fitness/app/helper/response"
+	"fitness/pkg/util/response"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -27,5 +27,5 @@ func LogTest(c *gin.Context) {
 		"address": "beijingshi chongwenmen",
 	}).Error("系统异常：")
 
-	response.Success(c, "handle ok")
+	response.Success("handle ok")
 }

@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"time"
 )
@@ -20,6 +21,11 @@ var (
 	DB *gorm.DB
 
 	//Loger Loger
+)
+
+//请求变量
+var (
+	C *gin.Context
 )
 
 const (
