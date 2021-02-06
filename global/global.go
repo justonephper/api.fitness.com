@@ -23,7 +23,7 @@ var (
 	//Loger Loger
 )
 
-//请求变量
+//请求上下文变量
 var (
 	C *gin.Context
 )
