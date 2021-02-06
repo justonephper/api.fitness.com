@@ -9,13 +9,12 @@ import (
 	"fitness/app/helper/response"
 	"fitness/global"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"time"
 )
 
 //404错误处理
 func HandleNotFound(c *gin.Context) {
-	c.JSON(http.StatusNotFound, response.Failed(10004, "requestParams url not exists!"))
+	response.Failed(c, 10004, "requestParams url not exists!")
 	return
 }
 
@@ -28,7 +27,7 @@ func Init() *gin.Engine {
 	//兜底路由
 	router.GET("/", func(c *gin.Context) {
 		response_str := "欢迎访问登云Api! " + "北京时间:" + time.Now().Format(global.TimeFormate)
-		c.JSON(http.StatusOK, response.Success(response_str))
+		response.Success(c, response_str)
 		//c.String(http.StatusOK,response_str)
 	})
 
@@ -66,8 +65,6 @@ func Init() *gin.Engine {
 	router.POST("blogs", blog.Add)
 	router.PUT("blogs/:id", blog.Update)
 	router.DELETE("blogs/:id", blog.Destroy)
-
-
 
 	return router
 }
