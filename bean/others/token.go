@@ -19,16 +19,18 @@ type TokenUserInfo struct {
 //生成token的信息
 type Claims struct {
 	TokenUserInfo
+	BufferTime int64
 	jwt.StandardClaims
 }
 
 //获取claims数据
 func GetStandardClaims() jwt.StandardClaims {
 	standardClaims := jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(global.TokenExpireDuration).Unix(), // 过期时间
+		NotBefore: time.Now().Unix() - 1000,                          // 签名生效时间
+		ExpiresAt: time.Now().Unix() + global.Config.JWT.ExpiresTime, // 过期时间 7天  配置文件
 		IssuedAt:  time.Now().Unix(),
-		Issuer:    global.APP_NAME, // 签名颁发者
-		Subject:   "user jwtToken", //签名主题
+		Issuer:    global.Config.GinConfig.AppName, // 签名颁发者
+		Subject:   global.Config.JWT.Subject,       //签名主题
 	}
 	return standardClaims
 }

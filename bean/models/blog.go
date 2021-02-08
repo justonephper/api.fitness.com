@@ -29,7 +29,6 @@ func (c *Blog) Create() bool {
 
 //根据id查询是否存在
 func (c *Blog) Find(id interface{}) bool {
-	global.DB.Where("id=?",id).First(c)
 	if global.DB.Where("id=?", id).First(c).RecordNotFound() {
 		return false
 	}

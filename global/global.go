@@ -1,36 +1,18 @@
 package global
 
 import (
+	"fitness/config"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"time"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
+//全局常用变量，类似于php中的超全局变量
 var (
-	RunMode string
-
-	HttpPort     int
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
-
-	APP_NAME  string
-	JwtSecret []byte
-
-	TimeFormate = "2006-01-02 15:04:05"
-
-	DB *gorm.DB
-
-	//Loger Loger
-)
-
-//请求上下文变量
-var (
-	C *gin.Context
-)
-
-const (
-	TokenExpireDuration = time.Hour * 2
-	RoleAdmin           = "admin"
-	RoleUser            = "user"
-	RoleStaff           = "staff"
+	C  *gin.Context //请求上下文变量
+	DB *gorm.DB     //数据库对象
+	Config config.Config
+	Viper     *viper.Viper
+	Logger    *zap.Logger
 )

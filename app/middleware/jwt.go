@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"errors"
 	"fitness/global"
 	"fitness/pkg/code"
 	"fitness/pkg/util/jwtToken"
@@ -9,13 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"time"
-)
-
-var (
-	TokenExpired     = errors.New("Token is expired")
-	TokenNotValidYet = errors.New("Token not active yet")
-	TokenMalformed   = errors.New("That's not even a token")
-	TokenInvalid     = errors.New("Couldn't handle this token:")
 )
 
 func JWTAuth() gin.HandlerFunc {
@@ -37,13 +29,15 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 
-		//检测token是否过期
-		if time.Now().Unix() < claims.ExpiresAt {
-			claims.StandardClaims.ExpiresAt = time.Now().Unix() + int64(global.TokenExpireDuration.Seconds())
+		//检测token刷新
+		c.Header("TokenUpdate", "no")
+		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
+			expiredTime := time.Now().Unix() + global.Config.JWT.ExpiresTime
+			claims.StandardClaims.ExpiresAt = expiredTime
 			newToken, _ := j.GenToken(claims)
-			newClaims, _ := j.ParseToken(newToken)
+			c.Header("TokenUpdate", "yes")
 			c.Header("new-token", newToken)
-			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
+			c.Header("new-expires-at", strconv.FormatInt(expiredTime, 10))
 		}
 		c.Set("claims", claims)
 		c.Next()

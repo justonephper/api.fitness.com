@@ -2,48 +2,31 @@ package bootstrap
 
 import (
 	"fitness/global"
-	"github.com/go-ini/ini"
-	"log"
-	"time"
+	"fmt"
+	"github.com/fsnotify/fsnotify"
+	"github.com/spf13/viper"
 )
 
-var Cfg *ini.File
-var err error
-
-func InitConfig() {
-	//1. 配置文件加载
-	Cfg, err = ini.Load("config/app.ini")
+func InitConfig(path ...string) *viper.Viper {
+	//项目配置文件
+	configFile := global.ConfigFile
+	v := viper.New()
+	v.SetConfigFile(configFile)
+	err := v.ReadInConfig()
 	if err != nil {
-		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
+	v.WatchConfig()
 
-	//2.初始化
-	LoadBase()
-	LoadServer()
-	LoadApp()
-}
+	v.OnConfigChange(func(e fsnotify.Event) {
+		fmt.Println("config file changed:", e.Name)
+		if err := v.Unmarshal(&global.Config); err != nil {
+			fmt.Println(err)
+		}
+	})
 
-func LoadBase() {
-	global.RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
-}
-
-func LoadServer() {
-	sec, err := Cfg.GetSection("server")
-	if err != nil {
-		log.Fatalf("Fail to get section 'server': %v", err)
+	if err := v.Unmarshal(&global.Config); err != nil {
+		fmt.Println(err)
 	}
-	global.HttpPort = sec.Key("HTTP_PORT").MustInt(8000)
-	global.ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second
-	global.WriteTimeout = time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
-}
-
-func LoadApp() {
-	sec, err := Cfg.GetSection("app")
-	if err != nil {
-		log.Fatalf("Fail to get section 'app': %v", err)
-	}
-
-	//注意，JwtSecret必须是[]byte类型
-	global.JwtSecret = []byte(sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)"))
-	global.APP_NAME = sec.Key("APP_NAME").MustString("fitness")
+	return v
 }
