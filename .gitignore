@@ -1,4 +1,6 @@
 .idea
+log/*
 config/app.ini
 gin-bin
 gin-bin.exe
+config.yaml

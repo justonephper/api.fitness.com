@@ -5,7 +5,9 @@ import (
 	"fitness/app/controller/api/auth"
 	"fitness/app/controller/api/md5"
 	"fitness/app/controller/api/task"
+	"fitness/global"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
@@ -33,6 +35,19 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 
 		//log接口
 		BaseRouter.GET("logTest", Log.LogTest)
+
+		//global C test
+		BaseRouter.GET("test1", func(context *gin.Context) {
+			//time.Sleep(time.Second * 10)
+			name,_ := global.C.Get("name")
+			//fmt.Println(name)
+			context.JSON(http.StatusOK,name)
+		})
+		BaseRouter.GET("test2", func(context *gin.Context) {
+			name,_ := global.C.Get("name")
+
+			context.JSON(http.StatusOK,name)
+		})
 	}
 	return BaseRouter
 }
