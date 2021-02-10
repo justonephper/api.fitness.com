@@ -22,7 +22,7 @@ func Add(c *gin.Context) {
 
 	//validate request params
 	if err := c.Bind(&params); err != nil {
-		response.UniqueFailedResponse(err)
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
@@ -34,10 +34,10 @@ func Add(c *gin.Context) {
 	blogCategory.Desc = params.Desc
 	ok := blogCategory.Add()
 	if !ok {
-		response.Failed(code.BlogCategoryAddFailed, nil)
+		response.Failed(c, code.BlogCategoryAddFailed, nil)
 		return
 	}
-	response.Success(blogCategory)
+	response.Success(c, blogCategory)
 	return
 }
 
@@ -51,10 +51,10 @@ func Show(c *gin.Context) {
 
 	blogCategory = models.NewBlogCategory()
 	if !blogCategory.Find(id) {
-		response.Failed(code.BlogCategoryNotExists, nil)
+		response.Failed(c, code.BlogCategoryNotExists, nil)
 		return
 	}
-	response.Success(blogCategory)
+	response.Success(c, blogCategory)
 	return
 }
 
@@ -66,7 +66,7 @@ func Show(c *gin.Context) {
 func Update(c *gin.Context) {
 	var params requestParams.BlogCategoryUpdateParams
 	if err := c.Bind(&params); err != nil {
-		response.UniqueFailedResponse(err)
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 	id := c.Param("id")
@@ -74,7 +74,7 @@ func Update(c *gin.Context) {
 	blogCategory = models.NewBlogCategory()
 	//查询是否存在
 	if !blogCategory.Find(id) {
-		response.Failed(code.BlogCategoryNotExists, nil)
+		response.Failed(c, code.BlogCategoryNotExists, nil)
 		return
 	}
 
@@ -83,10 +83,10 @@ func Update(c *gin.Context) {
 		"desc": params.Desc,
 	}
 	if !blogCategory.Update(updateData) {
-		response.Failed(code.BlogCategoryUpdateFailed, nil)
+		response.Failed(c, code.BlogCategoryUpdateFailed, nil)
 		return
 	}
-	response.Success(nil)
+	response.Success(c, nil)
 	return
 }
 
@@ -101,16 +101,16 @@ func Destroy(c *gin.Context) {
 	blogCategory = models.NewBlogCategory()
 	//查询数据是否存在
 	if !blogCategory.Find(id) {
-		response.Failed(code.BlogCategoryNotExists, nil)
+		response.Failed(c, code.BlogCategoryNotExists, nil)
 		return
 	}
 
 	//删除数据
 	if !blogCategory.Delete() {
-		response.Failed(code.BlogCategoryDeleteFailed, nil)
+		response.Failed(c, code.BlogCategoryDeleteFailed, nil)
 		return
 	}
-	response.Success(nil)
+	response.Success(c, nil)
 	return
 }
 
@@ -123,7 +123,7 @@ func Index(c *gin.Context) {
 	var pageInfo request.PageInfo
 	//param validate
 	if err := c.Bind(&pageInfo); err != nil {
-		response.UniqueFailedResponse(err)
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
@@ -131,9 +131,9 @@ func Index(c *gin.Context) {
 	blogCategory = models.NewBlogCategory()
 	list, total, err := blogCategory.Index(pageInfo)
 	if err != nil {
-		response.PageListNoData(pageInfo)
+		response.PageListNoData(c, pageInfo)
 		return
 	}
-	response.PageListData(list, total, pageInfo)
+	response.PageListData(c, list, total, pageInfo)
 	return
 }

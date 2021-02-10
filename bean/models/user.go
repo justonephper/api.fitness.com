@@ -22,7 +22,7 @@ type Users struct {
 	City              int64     `json:"city" gorm:"comment:'城市id'"`
 	PostCode          string    `json:"post_code" gorm:"size:16;comment:'邮编'"`
 	EmailVerifiedAt   MyTime `json:"email_verified_at" gorm:"comment:'邮箱验证时间'"`
-	VerificationToken string    `json:"verification_token" gorm:"comment:'jwtToken'"`
+	VerificationToken string    `json:"verification_token" gorm:"comment:'jwt'"`
 	Verified          *bool     `json:"verified" gorm:"comment:'是否激活,1:激活，0：未激活'"`
 	NewUser           *bool     `json:"new_user" gorm:"comment:'是否新用户，1：新用户，0：非新用户'"`
 	ModelTime

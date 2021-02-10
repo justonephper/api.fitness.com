@@ -3,7 +3,7 @@ package bootstrap
 import (
 	"fitness/global"
 	"fitness/pkg/util/directory"
-	utils "fitness/pkg/util/log"
+	"fitness/pkg/util/log"
 	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -89,7 +89,7 @@ func getEncoder() zapcore.Encoder {
 
 // getEncoderCore 获取Encoder的zapcore.Core
 func getEncoderCore() (core zapcore.Core) {
-	writer, err := utils.GetWriteSyncer() // 使用file-rotatelogs进行日志分割
+	writer, err := log.GetWriteSyncer() // 使用file-rotatelogs进行日志分割
 	if err != nil {
 		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
 		return

@@ -13,4 +13,6 @@ const (
 	RoleAdmin           = "admin"
 	RoleUser            = "user"
 	RoleStaff           = "staff"
+	ClientTypeWeb       = "client_type_web"
+	ClientTypeApp       = "client_type_app"
 )

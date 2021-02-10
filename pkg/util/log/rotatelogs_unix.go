@@ -1,6 +1,6 @@
 // +build !windows
 
-package utils
+package log
 
 import (
 	"fitness/global"

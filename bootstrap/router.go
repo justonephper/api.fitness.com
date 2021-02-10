@@ -12,7 +12,7 @@ import (
 
 //404错误处理
 func HandleNotFound(c *gin.Context) {
-	response.Failed(code.RequestUrlNotFound, "requestParams url not exists!")
+	response.Failed(c,code.RequestUrlNotFound, "requestParams url not exists!")
 	return
 }
 
@@ -24,7 +24,7 @@ func injectGlobalDefaultUrl(router *gin.Engine) {
 }
 
 //注册全局中间件
-func InjectGlobalMiddleware(router *gin.Engine) {
+func injectGlobalMiddleware(router *gin.Engine) {
 	router.Use(middleware.CopyContext())
 	router.Use(middleware.Cors())
 }
@@ -32,7 +32,7 @@ func InjectGlobalMiddleware(router *gin.Engine) {
 func InitRouter() *gin.Engine {
 	Router := gin.Default()
 	//注入全局中间件
-	InjectGlobalMiddleware(Router)
+	injectGlobalMiddleware(Router)
 
 	//注入错误处理路由
 	injectGlobalDefaultUrl(Router)
@@ -40,7 +40,7 @@ func InitRouter() *gin.Engine {
 	//兜底路由
 	Router.GET("/", func(c *gin.Context) {
 		response_str := "欢迎访问登云Api! " + "北京时间:" + time.Now().Format(global.TimeFormate)
-		response.Success(response_str)
+		response.Success(c,response_str)
 	})
 
 	//未登陆状态下的路由组

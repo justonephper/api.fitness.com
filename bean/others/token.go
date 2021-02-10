@@ -34,3 +34,12 @@ func GetStandardClaims() jwt.StandardClaims {
 	}
 	return standardClaims
 }
+
+//获取加密用户信息
+func GetTokenUserInfo(info TokenUserInfo, bufferTime int64) *Claims {
+	return &Claims{
+		TokenUserInfo:  info,
+		BufferTime:     bufferTime,
+		StandardClaims: GetStandardClaims(),
+	}
+}

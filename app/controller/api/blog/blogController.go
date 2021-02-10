@@ -22,7 +22,7 @@ func Add(c *gin.Context) {
 	//parse requestParams params
 	if err := c.ShouldBind(&params); err != nil {
 		//参数校验失败统一处理函数
-		response.UniqueFailedResponse(err)
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
@@ -44,10 +44,10 @@ func Add(c *gin.Context) {
 	blog.Content = params.Content
 
 	if ok := blog.Create(); !ok {
-		response.Failed(code.BlogAddFailed, nil)
+		response.Failed(c, code.BlogAddFailed, nil)
 		return
 	}
-	response.Success(blog)
+	response.Success(c, blog)
 	return
 }
 
@@ -60,7 +60,7 @@ func Update(c *gin.Context) {
 	var params requestParams.BlogUpdateParams
 	//parse requestParams params
 	if err := c.Bind(&params); err != nil {
-		response.UniqueFailedResponse(err)
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
@@ -71,7 +71,7 @@ func Update(c *gin.Context) {
 	blog = models.NewBlog()
 	ok := blog.Find(id)
 	if !ok {
-		response.Failed(code.BlogNotExists, nil)
+		response.Failed(c, code.BlogNotExists, nil)
 		return
 	}
 
@@ -83,11 +83,11 @@ func Update(c *gin.Context) {
 	}
 
 	if ok = blog.Update(updateData); !ok {
-		response.Failed(code.BlogUpdateFailed, nil)
+		response.Failed(c, code.BlogUpdateFailed, nil)
 		return
 	}
 
-	response.Success(blog)
+	response.Success(c, blog)
 	return
 }
 
@@ -104,16 +104,16 @@ func Destroy(c *gin.Context) {
 	blog = models.NewBlog()
 	ok := blog.Find(id)
 	if !ok {
-		response.Failed(code.BlogNotExists, nil)
+		response.Failed(c, code.BlogNotExists, nil)
 		return
 	}
 
 	//delete db-data
 	if !blog.Delete() {
-		response.Failed(code.BlogDeleteFailed, nil)
+		response.Failed(c, code.BlogDeleteFailed, nil)
 		return
 	}
-	response.Success(nil)
+	response.Success(c, nil)
 	return
 }
 
@@ -128,10 +128,10 @@ func Show(c *gin.Context) {
 	blog = models.NewBlog()
 	ok := blog.Find(id)
 	if !ok {
-		response.Failed(code.BlogNotExists, nil)
+		response.Failed(c, code.BlogNotExists, nil)
 		return
 	}
-	response.Success(blog)
+	response.Success(c, blog)
 	return
 }
 
@@ -145,17 +145,17 @@ func Index(c *gin.Context) {
 
 	//params validate
 	if err := c.Bind(&pageInfo); err != nil {
-		response.UniqueFailedResponse(err)
+		response.UniqueFailedResponse(c, err)
 		return
 	}
 
 	blog = models.NewBlog()
 	list, total, err := blog.Index(pageInfo)
 	if err != nil {
-		response.PageListNoData(pageInfo)
+		response.PageListNoData(c, pageInfo)
 		return
 	}
 
-	response.PageListData(list, total, pageInfo)
+	response.PageListData(c, list, total, pageInfo)
 	return
 }

@@ -24,7 +24,7 @@ func Index(c *gin.Context) {
 
 	//添加数据
 
-	response.Success("migrate successful")
+	response.Success(c, "migrate successful")
 }
 
 /**

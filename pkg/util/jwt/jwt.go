@@ -1,4 +1,4 @@
-package jwtToken
+package jwt
 
 import (
 	"errors"
