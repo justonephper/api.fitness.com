@@ -55,7 +55,11 @@ func CheckRequestFailed(c *gin.Context, msg interface{}) {
 
 //普通失败回调
 func Failed(c *gin.Context, codeNum int, data interface{}) {
-	Result(c, codeNum, data, code.LogicCodeText(codeNum))
+	if data != nil {
+		Result(c, codeNum, nil, data)
+	} else {
+		Result(c, codeNum, data, code.LogicCodeText(codeNum))
+	}
 }
 
 //成功回调

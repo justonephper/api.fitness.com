@@ -2,6 +2,7 @@ package router
 
 import (
 	"fitness/app/controller/api/auth"
+	"fitness/app/controller/api/cache"
 	"fitness/app/controller/api/index"
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +18,12 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		BaseRouter.POST("login", auth.Login)
 		BaseRouter.POST("register", auth.Register)
 		BaseRouter.GET("logout", auth.LogOut)
+
+		//redis操作
+		BaseRouter.GET("setString", cache.SetString)
+		BaseRouter.GET("getString", cache.GetString)
+		BaseRouter.GET("setArray", cache.SetHash)
+		BaseRouter.GET("getArray", cache.GetHash)
 	}
 	return BaseRouter
 }

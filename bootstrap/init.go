@@ -17,8 +17,11 @@ func Init() *gin.Engine {
 	//2. 初始化zap日志库
 	global.Logger = InitZap()
 
-	//2. DB初始化
+	//2.1 DB初始化
 	global.DB = InitDB()
+
+	//2.2 redis初始化
+	global.RedisClient = InitRedis()
 
 	//3. 迁移文件初始化
 	InitMigration()

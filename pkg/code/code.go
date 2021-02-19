@@ -6,7 +6,7 @@ var (
 	BadRequestParams        = 10002
 	NoLoginOrIllegalAccess  = 10003
 	AuthorizationHasExpired = 10004
-	RequestUrlNotFound = 10005
+	RequestUrlNotFound      = 10005
 	//未登录或非法访问
 
 	//blog category
