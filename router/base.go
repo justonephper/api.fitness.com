@@ -19,11 +19,21 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		BaseRouter.POST("register", auth.Register)
 		BaseRouter.GET("logout", auth.LogOut)
 
-		//redis操作
+		//redis-string
 		BaseRouter.GET("setString", cache.SetString)
 		BaseRouter.GET("getString", cache.GetString)
-		BaseRouter.GET("setArray", cache.SetHash)
-		BaseRouter.GET("getArray", cache.GetHash)
+		BaseRouter.GET("strings", cache.Strings)
+
+		//redis-list
+		BaseRouter.GET("lists", cache.Lists)
+
+		//redis-hash-table
+		BaseRouter.GET("hash", cache.Hash)
+
+		//redis-set
+
+		//redis-set-
+
 	}
 	return BaseRouter
 }

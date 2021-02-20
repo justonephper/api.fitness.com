@@ -29,6 +29,7 @@ func _genToken(jwt *JWT) (token string, err error) {
 	return jwt.GenToken(tokenUserInfo)
 }
 
+//解析token
 func TestParseToken(t *testing.T) {
 	obj := NewJWT()
 	token, _ := _genToken(obj)

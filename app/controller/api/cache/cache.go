@@ -50,10 +50,3 @@ func GetString(c *gin.Context) {
 	response.Success(c, res)
 	return
 }
-
-//设置hash值
-func SetHash(c *gin.Context) {
-
-}
-
-//获取hash值
