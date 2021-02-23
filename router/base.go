@@ -31,8 +31,11 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		BaseRouter.GET("hash", cache.Hash)
 
 		//redis-set
+		BaseRouter.GET("set", cache.Set)
 
-		//redis-set-
+		//redis-sorted-set
+		BaseRouter.GET("sset", cache.SortSet)
+
 
 	}
 	return BaseRouter

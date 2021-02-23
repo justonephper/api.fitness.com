@@ -77,9 +77,6 @@ func Lists(c *gin.Context) {
 	}
 	fmt.Println("lrem():", global.RedisClient.LRange(global.RedisClient.Context(), list1, 0, -1).Val())
 
-
-	global.RedisClient.HGetAll(global.RedisClient.Context(),"hash1")
-
 	c.String(http.StatusOK, "ok")
 	return
 }

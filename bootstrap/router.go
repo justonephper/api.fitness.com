@@ -25,7 +25,6 @@ func injectGlobalDefaultUrl(router *gin.Engine) {
 
 //注册全局中间件
 func injectGlobalMiddleware(router *gin.Engine) {
-	router.Use(middleware.CopyContext())
 	router.Use(middleware.Cors())
 }
 

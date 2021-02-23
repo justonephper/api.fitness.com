@@ -77,7 +77,7 @@ func UniqueFailedResponse(c *gin.Context, err error) {
 		return
 	}
 	// validator.ValidationErrors类型错误则进行翻译
-	locale := request.GetLocale()
+	locale := request.GetLocale(c)
 	trans := translator.GetTranslator(locale)
 	CheckRequestFailed(c, errs.Translate(trans))
 }

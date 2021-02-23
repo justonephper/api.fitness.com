@@ -1,7 +1,7 @@
 package request
 
 import (
-	"fitness/global"
+	"github.com/gin-gonic/gin"
 )
 
 // Paging common input parameter structure
@@ -14,8 +14,8 @@ type PageInfo struct {
 }
 
 //获取header头中语言设置
-func GetLocale() (locale string) {
-	header := global.C.Request.Header
+func GetLocale(c *gin.Context) (locale string) {
+	header := c.Request.Header
 	if lang, ok := header["Api-Lang"]; ok {
 		locale = lang[0]
 	} else {
