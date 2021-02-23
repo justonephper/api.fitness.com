@@ -47,12 +47,39 @@ func SortSet(c *gin.Context) {
 	count := global.RedisClient.ZCount(global.RedisClient.Context(), key, "100", "110").Val()
 	fmt.Println("ZCount():", count)
 
-	//删除分数最高者
-	pop, _ := global.RedisClient.ZRangeByLex(global.RedisClient.Context(), key, &redis.ZRangeBy{
-		Min: "-",
-		Max: "+",
-	}).Result()
-	fmt.Printf(">>>>>>>>>>>>>>>>>>>>%#v", pop)
+	//获取分数最高者  (5.0版本以上支持)
+	//err = global.RedisClient.ZPopMax(global.RedisClient.Context(), key).Err()
+	//if err != nil {
+	//	response.Success(c, fmt.Sprintf("ZPopMax() failed,err:", err))
+	//	return
+	//}
+
+	//获取一定范围你的元素
+	child, err := global.RedisClient.ZRange(global.RedisClient.Context(), key, 0, -1).Result()
+	if err != nil {
+		response.Success(c, fmt.Sprintf("ZRang() failed,err:", err))
+		return
+	}
+	fmt.Println("ZRang():", child)
+
+	//获取成员的排名
+	member := global.RedisClient.ZRank(global.RedisClient.Context(), key, "wangwu").Val()
+	fmt.Println("ZRank():", member)
+
+	//移除成员
+	rem_res := global.RedisClient.ZRem(global.RedisClient.Context(), key, "zhangsan").Val()
+	fmt.Println("ZRem():", rem_res)
+
+	//查询成员
+	fmt.Println("all member:", global.RedisClient.ZRange(global.RedisClient.Context(), key, 0, -1).Val())
+
+	//查询成员分数
+	score := global.RedisClient.ZScore(global.RedisClient.Context(), key, "liliu").Val()
+	fmt.Println("ZScore():", score)
+
+	//扫描键值对
+	keys, _ := global.RedisClient.ZScan(global.RedisClient.Context(), key, 0, "", 0).Val()
+	fmt.Println("ZScan():", keys)
 
 	response.Success(c, "sorted set")
 	return
